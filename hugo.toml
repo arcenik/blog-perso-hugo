@@ -1,0 +1,28 @@
+baseURL = "https://francois.scala.name/"
+title = "François's notes"
+languageCode = 'en-us'
+theme = 'github-style'
+
+[params]
+  enableSearch = false
+  author = "François Scala"
+  url = "https://francois.scala.name/"
+  github = "arcenik"
+  linkedin = "francois-scala-sre-linux"
+  location = "Switzerland"
+  avatar = "/images/avatar.png"
+  rss = true
+  favicon = "/images/header-icon.png"
+  headerIcon = "/images/header-icon.png"
+
+[outputs]
+  home = ["html", "json"]
+
+[outputFormats.json]
+  mediaType = "application/json"
+  baseName = "index"
+  isPlainText = false
+
+[services]
+  [services.googleAnalytics]
+    ID = "G-ZS6EN413N8"
