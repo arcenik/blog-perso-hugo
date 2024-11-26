@@ -1,6 +1,6 @@
 +++
 date = '2024-11-22T17:00:00+01:00'
-draft = true
+draft = false
 title = 'First steps with Bosh on Virtualbox'
 +++
 
