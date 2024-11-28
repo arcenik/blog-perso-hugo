@@ -2,11 +2,12 @@
 date = '2024-11-22T17:00:00+01:00'
 draft = false
 title = 'First steps with Bosh on Virtualbox'
+keywords = ['open source', 'cloud', 'automation', 'bosh']
 +++
 
 ## Introduction
 
-[BOSH](https://bosh.io/docs/) is an opensource project from [Cloud Foundry](https://www.cloudfoundry.org/) that allow release engineering, software deployment and application lifecycle management of large scale and distributed system.
+[BOSH](https://bosh.io/docs/) is an open source project from [Cloud Foundry](https://www.cloudfoundry.org/) that allow release engineering, software deployment and application lifecycle management of large scale and distributed system.
 
 ![Cloud Foundry Bosh logo](/images/cf-bosh-logo.png)
 
@@ -75,7 +76,7 @@ Started installing CPI
   Compiling package 'virtualbox_cpi/80aa8cbfaa414f488b4f7821397f42edea6473638e50154b20db3f1ddf234b83'...
 ```
 
-But after less than 2 minutes, it paniced while trying to get the VirtualBox version.
+But after less than 2 minutes, it panicked while trying to get the VirtualBox version.
 
 ```text
 [Cmd Runner] 2024/11/25 14:34:02 DEBUG - Stderr:
@@ -129,7 +130,7 @@ Indeed, we can see the output contains a long warning line that ends with a dot.
 7.1.4r165100
 ```
 
-Is it reproductible ?
+Is it reproducible ?
 
 ```sh
 $ export LOGNAME=bla
