@@ -1,0 +1,4 @@
+[submodule "themes/github-style"]
+	path = themes/github-style
+	url = https://github.com/arcenik/github-style
+	branch = feat-custom-css-js
