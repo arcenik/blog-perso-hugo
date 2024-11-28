@@ -19,13 +19,13 @@ As I'm using Arch Linux, let's install [VirtualBox](https://archlinux.org/packag
 
 First clone the bosh-deployment repo:
 
-```sh {class="code-overflow"}
+```sh
 $ git clone https://github.com/cloudfoundry/bosh-deployment.git bosh-deployment
 ```
 
 Then create the Bosh environment, using the quite long create-env command:
 
-```sh {class="code-overflow"}
+```sh
 $ bosh create-env ./bosh-deployment/bosh.yml \
   --state ./state.json \
   -o ./bosh-deployment/virtualbox/cpi.yml \
@@ -45,7 +45,7 @@ $ bosh create-env ./bosh-deployment/bosh.yml \
 
 So far so good
 
-```text {class="code-overflow"}
+```text
 <...>
 Started validating
   Downloading release 'bosh'... Skipped [Found in local cache] (00:00:00)
@@ -78,7 +78,7 @@ Started installing CPI
 
 But after less than 2 minutes, it panicked while trying to get the VirtualBox version.
 
-```text {class="code-overflow"}
+```text
 [Cmd Runner] 2024/11/25 14:34:02 DEBUG - Stderr:
 [Cmd Runner] 2024/11/25 14:34:02 DEBUG - Successful: true (0)
 [driver.LocalRunner] 2024/11/25 14:34:02 DEBUG - Execute 'VBoxManage --version'
@@ -105,7 +105,7 @@ And a [2 months issue](https://github.com/cloudfoundry/bosh-virtualbox-cpi-relea
 
 So, here is the faulty function, from [bosh-virtualbox-cpi-release](https://github.com/cloudfoundry/bosh-virtualbox-cpi-release/) repo in src/bosh-virtualbox-cpi/vm/network/system_info.go:
 
-```go {class="code-overflow"}
+```go
 func (n Networks) getVboxVersion() (string, string, error) {
 	output, err := n.driver.Execute("--version")
 	if err != nil {
@@ -125,14 +125,14 @@ func (n Networks) getVboxVersion() (string, string, error) {
 
 Indeed, we can see the output contains a long warning line that ends with a dot. Therefore the split function returns 4 elements.
 
-```text {class="code-overflow"}
+```text
 [Cmd Runner] 2024/11/25 14:34:02 DEBUG - Stdout: WARNING: Environment variable LOGNAME or USER does not correspond to effective user id.
 7.1.4r165100
 ```
 
 Is it reproducible ?
 
-```sh {class="code-overflow"}
+```sh
 $ export LOGNAME=bla
 $ VBoxManage --version
 WARNING: Environment variable LOGNAME or USER does not correspond to effective user id.
@@ -160,7 +160,7 @@ Indeed, and it show this extra warning on any command, even when displaying usag
 
 To avoid to check this in all instances of **n.driver.Execute**, let's patch the **Execute** function itself.
 
-```go {class="code-overflow"}
+```go
 func (d ExecDriver) Execute(args ...string) (string, error) {
         output, error := d.ExecuteComplex(args, ExecuteOpts{})
         if strings.HasPrefix(output, "WARNING:") { // cut the first WARNING line if present
@@ -176,7 +176,7 @@ But before I can try again, I need to create a release and update the deployment
 
 That looks easy, just use the create-release
 
-```sh {class="code-overflow"}
+```sh
 $ bosh create-release --force --tarball=~/tmp/vbox-cpi-test.tgz
 -- Started downloading 'golang-1-darwin/42353203720fdc244cc16f881167bb0363f38ff6f991247c4356e38bc6b5fb81' (sha1=sha256:ad0052d2c45bf20672f58ed4d15c368554014632e8c051033f5b0caacd025237)
 -- Started downloading 'guest-additions/8c4bb0eb2604cd2ec71c3ee0c4349d26b1da64635fbbfc61fdb4eccddee9f35a' (sha1=sha256:31fb7d6cd62a235d52b27ce73fa03edbdc5750f75f49432edd936b7c957029ac)
@@ -200,13 +200,13 @@ Building a release from directory '/home/fs/tmp/bosh-virtualbox-cpi-release':
 But once again it is not that easy. The problem is that the repo uses [Git Large File Storage](https://git-lfs.com/). So let's install [git-lfs](https://archlinux.org/packages/extra/x86_64/git-lfs/) and install it on the repo
 
 
-```sh {class="code-overflow"}
+```sh
 $ git lfs install
 $ git lfs pull
 ```
 Try again, and voila, the tgz release.
 
-```sh {class="code-overflow"}
+```sh
 $ bosh create-release --force --tarball=~/tmp/vbox-cpi-test.tgz
 
 <...>
@@ -239,7 +239,7 @@ Succeeded
 
 Now I have my **vbox-cpi-test.tgz** release, let's update the bosh-deployment/virtualbox/cpi.yml to test it.
 
-```yaml {class="code-overflow"}
+```yaml
 - name: cpi
   path: /releases/-
   type: replace
@@ -250,7 +250,7 @@ Now I have my **vbox-cpi-test.tgz** release, let's update the bosh-deployment/vi
 
 That's look better
 
-```text {class="code-overflow"}
+```text
 <...>
 Uploading stemcell 'bosh-vsphere-esxi-ubuntu-jammy-go_agent/1.639'... Finished (00:00:20)
 
@@ -261,7 +261,7 @@ Started deploying
 
 And after less than 10 minutes it completed successfully.
 
-```text {class="code-overflow"}
+```text
 <...>
   Compiling package 'grootfs/4ec1e6a649cb2f3012ebb52b56f7892bd21521a8298afe658cc28430ca4354e4'... Skipped [Package already compiled] (00:00:00)
   Compiling package 'credhub/ccbb941ebc15f45f6248efa1b40194707c3155a7eb7e2ae99179d54233d3609f'... Skipped [Package already compiled] (00:00:00)
@@ -279,7 +279,7 @@ Succeeded
 
 Just setup the environment
 
-```sh {class="code-overflow"}
+```sh
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
 $ bosh alias-env vbox -e 192.168.56.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca)
@@ -308,7 +308,7 @@ Now That I have a working solution, commit it and push it to my forked repo and 
 
 Then let's deploy the Zookeeper deployment as explained in the guide
 
-```sh {class="code-overflow"}
+```sh
 $ bosh -e vbox \
 -d zookeeper \
 deploy <(curl -qs https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml)
@@ -316,7 +316,7 @@ deploy <(curl -qs https://raw.githubusercontent.com/cppforlife/zookeeper-release
 
 Oh no ....
 
-```text {class="code-overflow"}
+```text
 <...>
 Task 3 | 15:25:27 | Creating missing vms: zookeeper/53330f7d-0ccd-4c30-847f-0a26a763ec74 (3) (00:00:10)
 Task 3 | 15:25:27 | Creating missing vms: zookeeper/f7edbcb7-f7ef-40f5-80e0-5c5c1086f1fd (0) (00:00:10)

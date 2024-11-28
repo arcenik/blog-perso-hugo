@@ -10,7 +10,7 @@ keywords = ['open source', 'docker', 'debian', 'vagrant']
 As I encountered some ruby problem with [Vagrant](https://www.vagrantup.com/) on my [Archlinux](https://archlinux.org/)
 laptop, I decided to use Docker as a workaround. 
 
-```sh {class="code-overflow"}
+```sh
 $ vagrant
 /usr/lib/ruby/3.3.0/rubygems/specification.rb:2245:in `raise_if_conflicts': Unable to activate vagrant_cloud-3.1.1, because rexml-3.3.2 conflicts with rexml (~> 3.2.5) (Gem::ConflictError)
         from /usr/lib/ruby/3.3.0/rubygems/specification.rb:1383:in `activate'
@@ -25,7 +25,7 @@ So let's create a Docker image, using a debian slim image and just install vagra
 
 After a two minutes build you have your image that is ... 1.8Gb large !
 
-```sh {class="code-overflow"}
+```sh
 $ docker image ls vagrant:test
 REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 vagrant      test      05c7aa145055   27 seconds ago   1.8GB
@@ -33,7 +33,7 @@ vagrant      test      05c7aa145055   27 seconds ago   1.8GB
 
 What happenned exactly ?
 
-```sh {class="code-overflow"}
+```sh
 $ docker run -ti --rm debian:bookworm-slim
 # apt update
 # apt install vagrant
@@ -49,7 +49,7 @@ Abort
 
 Let's dig in with the **Debug::pkgDepCache::AutoInstall** apt debug option.
 
-```text {class="code-overflow"}
+```text
   Installing vagrant-libvirt:amd64 as Recommends of vagrant:amd64
     Installing libguestfs-tools:amd64 as Recommends of vagrant-libvirt:amd64
       Installing libguestfs0:amd64 as Depends of libguestfs-tools:amd64
@@ -86,7 +86,7 @@ The problem is that recommended packages are installed and cause a dependency ca
 
 Let's see what is the impact.
 
-```sh {class="code-overflow"}
+```sh
 $ docker run -ti --rm debian:bookworm-slim
 # apt update
 # apt install --no-install-recommends vagrant
@@ -102,7 +102,7 @@ Nice ! From 1.8Gb to 145Mb, that more than 12 times less !
 
 Now I can update the Dockerfile
 
-```docker {class="code-overflow"}
+```docker
 FROM debian:bookworm-slim
 
 RUN set -ex ;\
@@ -121,7 +121,7 @@ ENTRYPOINT [ "/usr/bin/vagrant" ]
 
 And the result is much more smaller.
 
-```sh {class="code-overflow"}
+```sh
 $ docker image ls vagrant:test
 REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
 vagrant      test      6265e705f81d   4 hours ago   245MB
