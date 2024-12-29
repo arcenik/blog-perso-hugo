@@ -13,6 +13,8 @@ keywords = ['open source', 'cloud', 'automation', 'bosh']
 
 I wanted to take a look at it and fortunately it is possible to play on a local playground environment on [VirtualBox](https://www.virtualbox.org/) using the [bosh-lite](https://bosh.io/docs/bosh-lite/) instruction.
 
+<!--more-->
+
 ## Not so easy
 
 As I'm using Arch Linux, let's install [VirtualBox](https://archlinux.org/packages/extra/x86_64/virtualbox/) and [Bosh-Cli(aur)](https://aur.archlinux.org/packages/bosh-7-cli).

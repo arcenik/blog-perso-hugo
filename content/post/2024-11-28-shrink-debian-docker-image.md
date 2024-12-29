@@ -21,7 +21,10 @@ $ vagrant
         from /opt/vagrant/embedded/gems/gems/vagrant-2.4.2/bin/vagrant:16:in `each'
         from /opt/vagrant/embedded/gems/gems/vagrant-2.4.2/bin/vagrant:16:in `<main>'
 ```
+
 So let's create a Docker image, using a debian slim image and just install vagrant and some vagrant plugins.
+
+<!--more-->
 
 After a two minutes build you have your image that is ... 1.8Gb large !
 
@@ -31,7 +34,7 @@ REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 vagrant      test      05c7aa145055   27 seconds ago   1.8GB
 ```
 
-What happenned exactly ?
+What happened exactly ?
 
 ```sh
 $ docker run -ti --rm debian:bookworm-slim
