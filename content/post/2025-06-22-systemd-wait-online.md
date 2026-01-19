@@ -15,7 +15,7 @@ Jun 22 13:40:00 server systemd[1]: systemd-networkd-wait-online.service: Failed 
 Jun 22 13:40:00 server systemd[1]: Failed to start systemd-networkd-wait-online.service - Wait for Network to be Configured.
 ```
 
-
+The service is linked to the **network-online** systemd target.
 
 ```sh
 server# ls -l /etc/systemd/system/network-online.target.wants/
@@ -24,11 +24,9 @@ lrwxrwxrwx 1 root root 42 Mar 23 12:02 networking.service -> /usr/lib/systemd/sy
 lrwxrwxrwx 1 root root 60 Apr 26 18:26 systemd-networkd-wait-online.service -> /usr/lib/systemd/system/systemd-networkd-wait-online.service
 ```
 
-<!--more-->
-
 ## Identify the problem
 
-Reproduce the problem, running the command without any additional argument.
+Reproduce the problem, running the command without any additional argument. Real time is 2 minutes and return 1.
 
 ```sh
 server# time /usr/lib/systemd/systemd-networkd-wait-online ; echo $?
@@ -39,6 +37,8 @@ user    0m0.004s
 sys     0m0.011s
 1
 ```
+
+<!--more-->
 
 ## Attempt to fix
 
@@ -57,6 +57,14 @@ Now fix the service
 
 ```sh
 server# systemctl edit --full systemd-networkd-wait-online.service
+```
+
+The command is changed to specify the network interface to watch and to reduce the timeout.
+
+```ini
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/systemd/systemd-networkd-wait-online --timeout=2 -i enp2s0f0
 ```
 
 The service is still failing, but mutch faster.
