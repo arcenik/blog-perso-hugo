@@ -1,6 +1,5 @@
 +++
 date = '2025-06-22T12:20:32+02:00'
-draft = true
 title = 'Observations and analysis about systemd-networkd-wait-online.service'
 +++
 
