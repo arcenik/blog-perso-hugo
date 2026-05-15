@@ -1,6 +1,6 @@
 baseURL = "https://francois.scala.name/"
 title = "François's notes"
-languageCode = 'en-us'
+locale = 'en-us'
 theme = 'github-style'
 enableRobotsTXT = true
 
