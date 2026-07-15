@@ -78,6 +78,8 @@ Started installing CPI
   Compiling package 'virtualbox_cpi/80aa8cbfaa414f488b4f7821397f42edea6473638e50154b20db3f1ddf234b83'...
 ```
 
+<!--more-->
+
 But after less than 2 minutes, it panicked while trying to get the VirtualBox version.
 
 ```text

@@ -37,8 +37,6 @@ sys     0m0.011s
 1
 ```
 
-<!--more-->
-
 ## Attempt to fix
 
 Testing the commmand with extra argument, the command exit immediately and returns 0.
@@ -51,6 +49,8 @@ user    0m0.013s
 sys     0m0.004s
 0
 ```
+
+<!--more-->
 
 Now fix the service
 

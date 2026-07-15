@@ -34,14 +34,11 @@ Extract from **/etc/nixos/configuration.nix**:
 
 Add a dedicated confuration file in /etc/nixos, **/etc/nixos/ollama.nix**:
 
+<!--more-->
+
 ```nix
 { config, pkgs, ... }:
 {
-  environment.systemPackages = [
-    pkgs.ollama
-    pkgs.ollama-rocm
-  ];
-
   boot.kernelParams = [
     "amd_iommu=off"
   ];

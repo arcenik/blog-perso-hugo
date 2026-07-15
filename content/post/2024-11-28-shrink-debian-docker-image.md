@@ -77,6 +77,8 @@ Let's dig in with the **Debug::pkgDepCache::AutoInstall** apt debug option.
                                 Installing libfdisk1:amd64 as Depends of systemd:amd64
 ```
 
+<!--more-->
+
 So **libguestfs0** depends on **supermin** that recommands **linux-image-amd64** and now you have installed a kernel image, useless for a Docker image.
 
 Same thing with **libspice-server1** that recommends **gstreamer1.0-plugins-good** lead by a dependencies cascase to install **systemd**

@@ -46,6 +46,8 @@ import (
 )
 ```
 
+<!--more-->
+
 Then, the json and exporter types. The json type members must start with a capital, so the json decoder can access them.
 Only a few fields are retreived and exported in this example to avoir repetition and keep the example short.
 

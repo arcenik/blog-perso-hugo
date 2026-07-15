@@ -49,6 +49,8 @@ $ wget -c https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.5.tar.xz
 $ tar xfJ linux-6.12.5.tar.xz
 ```
 
+<!--more-->
+
 On the target server, you can use the modlocalconfig to strip down the kernel configuration to the bare minimum and reduce build time.
 
 ```sh
